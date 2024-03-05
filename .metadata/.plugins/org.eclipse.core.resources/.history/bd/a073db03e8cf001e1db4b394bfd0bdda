@@ -1,0 +1,11 @@
+server.port=9191
+spring.application.name=API-Gateway
+management.endpoints.web.exposure.include=*
+
+spring.cloud.gateway.routes[0].id=Registration-Microservice
+spring.cloud.gateway.routes[0].uri=http://localhost:8081
+spring.cloud.gateway.routes[0].predicates[0]=Path=/api/**
+
+spring.cloud.gateway.routes[1].id=Vehicle-Microservice
+spring.cloud.gateway.routes[1].uri=http://localhost:8082
+spring.cloud.gateway.routes[1].predicates[0]=Path=/api/vehicle/**

@@ -1,0 +1,10 @@
+package com.example.demo.registration.modelmapper;
+
+import com.example.demo.registration.model.UserRegistration;
+
+public class RegistrationMapper {
+	public static UserRegistrationDto mapToRegistrationDto(UserRegistration registration) {
+		
+	}
+
+}

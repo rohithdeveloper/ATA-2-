@@ -1,0 +1,50 @@
+package com.example.vehicle.serviceimpl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.example.vehicle.dto.VehicleDto;
+import com.example.vehicle.model.Vehicle;
+import com.example.vehicle.modelmapper.VehicleMapper;
+import com.example.vehicle.repository.VehicleRepository;
+import com.example.vehicle.service.VehicleService;
+
+@Service
+public class VehicleServiceImpl implements VehicleService {
+
+	@Autowired
+	private VehicleRepository vehicleRepo;
+
+	@Override
+	public String addVehicle(VehicleDto vehicleDto) {
+		// TODO Auto-generated method stub
+		Vehicle existingVehicle = vehicleRepo.findVehicleById(vehicleDto.getId());
+		if (existingVehicle != null) {
+			return "User already exists";
+
+		} else {
+			// convert dto to entity
+			Vehicle vehicle = VehicleMapper.mapToVehicle(vehicleDto);
+			Vehicle saveVehicle = vehicleRepo.save(vehicle);
+
+			// convert entity to dto
+			VehicleDto vehicledtos = VehicleMapper.mapToVehicleDto(saveVehicle);
+			return "Vehicle added successfully";
+		}
+
+	}
+
+	@Override
+	public VehicleDto viewVehicleById(int vehicleNo) {
+		// TODO Auto-generated method stub
+		Vehicle vehicle =vehicleRepo.findVehicleById(vehicleNo);
+		if(vehicle!=null) {
+			Vehicle getVehicle= VehicleMapper.mapToVehicleDto(vehicle);
+			return getVehicle;
+		}
+		return null;
+		
+		
+	}
+
+}

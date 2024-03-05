@@ -1,0 +1,89 @@
+package com.example.vehicle.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.vehicle.dto.VehicleDto;
+import com.example.vehicle.service.JwtService;
+import com.example.vehicle.service.VehicleService;
+
+@RestController
+@RequestMapping("/api/vehicle")
+public class VehicleController {
+
+	@Autowired
+	private VehicleService vehicleService;
+
+	@Autowired
+	private JwtService jwtService; // Inject JwtService
+
+	private Object validateTokenAndGetClaims(String jwtToken) {
+        if (jwtToken != null && jwtToken.startsWith("Bearer ")) {
+            String token = jwtToken.substring(7);
+            return jwtService.validateTokenAndGetClaims(token);
+        }
+        return null;
+    }
+
+    @PostMapping("/addVehicle")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public String saveVehicle(@RequestBody VehicleDto vehicleDto, @RequestHeader("Authorization") String jwtToken) {
+        Object principal = validateTokenAndGetClaims(jwtToken);
+        if (principal != null) {
+            return vehicleService.addVehicle(vehicleDto);
+        } else {
+            throw new RuntimeException("Invalid or missing JWT token");
+        }
+    }
+
+    @GetMapping("/vehicle/{id}")
+    public VehicleDto getVehicleById(@PathVariable int id, @RequestHeader("Authorization") String jwtToken) {
+        Object principal = validateTokenAndGetClaims(jwtToken);
+        if (principal != null) {
+            return vehicleService.viewVehicleById(id);
+        } else {
+            throw new RuntimeException("Invalid or missing JWT token");
+        }
+    }
+
+    @GetMapping("/allVehicles")
+    public List<VehicleDto> getAllVehicles(@RequestHeader("Authorization") String jwtToken) {
+        Object principal = validateTokenAndGetClaims(jwtToken);
+        if (principal != null) {
+            return vehicleService.viewAll();
+        } else {
+            throw new RuntimeException("Invalid or missing JWT token");
+        }
+    }
+
+    @PutMapping("/vehicle/{id}")
+    public String updateVehicle(@PathVariable int id, @RequestBody VehicleDto vehicleDto, @RequestHeader("Authorization") String jwtToken) {
+        Object principal = validateTokenAndGetClaims(jwtToken);
+        if (principal != null) {
+            return vehicleService.modifyVehicleById(id, vehicleDto);
+        } else {
+            throw new RuntimeException("Invalid or missing JWT token");
+        }
+    }
+
+    @DeleteMapping("/vehicle/{id}")
+    public String deleteVehicle(@PathVariable int id, @RequestHeader("Authorization") String jwtToken) {
+        Object principal = validateTokenAndGetClaims(jwtToken);
+        if (principal != null) {
+            return vehicleService.deleteVehicle(id);
+        } else {
+            throw new RuntimeException("Invalid or missing JWT token");
+        }
+    }
+}

@@ -1,0 +1,5 @@
+package com.example.demo.apigateway.filter;
+
+public class RouteValidator {
+
+}

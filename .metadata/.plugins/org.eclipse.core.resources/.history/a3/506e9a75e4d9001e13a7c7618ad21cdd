@@ -1,0 +1,5 @@
+package com.example.vehicle.config;
+
+public class VehicleSecurityConfig {
+
+}

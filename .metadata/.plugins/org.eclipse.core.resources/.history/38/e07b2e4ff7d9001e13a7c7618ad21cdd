@@ -1,0 +1,13 @@
+
+spring.datasource.url=jdbc:postgresql://localhost:5432/Vehicle_Service
+server.port=8082
+spring.datasource.username=postgres
+spring.datasource.password=test@123
+spring.datasource.driver-class-name=org.postgresql.Driver
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+#spring.jpa.properties.hibernate.temp.use_jdbc_metadata_defaults=false
+spring.jpa.show-sql=true
+spring.jpa.hibernate.ddl-auto=update
+spring.application.name=Vehicle-Microservice
+spring.cloud.compatibility-verifier.enabled=false
+

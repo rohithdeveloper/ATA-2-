@@ -1,0 +1,5 @@
+package com.example.identity.serviceimpl;
+
+public class CustomUserDetails {
+
+}

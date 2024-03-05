@@ -1,0 +1,16 @@
+package com.example.vehicle.service;
+
+import java.util.List;
+
+import com.example.vehicle.dto.VehicleDto;
+
+public interface VehicleService {
+	String addVehicle(VehicleDto vehilce);
+	VehicleDto viewVehilce(VehicleDto vehicle);
+	List<VehicleDto> viewAll();
+	VehicleDto viewVehicleById(int vehicleNo);
+	VehicleDto modifyVehicleById(int vehicleNo);
+	VehicleDto deleteVehicle(int vehicleNo);
+	 
+
+}

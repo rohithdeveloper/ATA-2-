@@ -1,0 +1,5 @@
+package com.example.identity.entity;
+
+public class AuthRequest {
+
+}

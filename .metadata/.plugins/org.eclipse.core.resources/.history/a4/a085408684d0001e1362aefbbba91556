@@ -1,0 +1,88 @@
+package com.example.vehicle.serviceimpl;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.example.vehicle.dto.VehicleDto;
+import com.example.vehicle.exception.VehicleNotFoundException;
+import com.example.vehicle.model.Vehicle;
+import com.example.vehicle.modelmapper.VehicleMapper;
+import com.example.vehicle.repository.VehicleRepository;
+import com.example.vehicle.service.VehicleService;
+
+@Service
+public class VehicleServiceImpl implements VehicleService {
+
+	@Autowired
+	private VehicleRepository vehicleRepo;
+
+	public String addVehicle(VehicleDto vehicleDto) {
+		int vehicleId = vehicleDto.getId();
+		Optional<Vehicle> existingVehicle = vehicleRepo.findById(vehicleId);
+
+		if (existingVehicle.isPresent()) {
+			return "Vehicle with id " + vehicleId + " already exists";
+		} else {
+			// Convert dto to entity
+			Vehicle vehicle = VehicleMapper.mapToVehicle(vehicleDto);
+
+			// Save the new vehicle
+			Vehicle savedVehicle = vehicleRepo.save(vehicle);
+
+			// Convert the saved entity back to dto if needed
+			VehicleDto savedVehicleDto = VehicleMapper.mapToVehicleDto(savedVehicle);
+
+			// Return a success message
+			return "Vehicle added successfully";
+		}
+	}
+
+	@Override
+	public VehicleDto viewVehicleById(int vehicleNo) {
+		// TODO Auto-generated method stub
+		Optional<Vehicle> vehicle = vehicleRepo.findById(vehicleNo);
+		if (vehicle != null) {
+			VehicleDto getVehicle = VehicleMapper.mapToVehicleDto(vehicle.get());
+			return getVehicle;
+		}
+		return null;
+	}
+
+	@Override
+	public List<VehicleDto> viewAll() {
+		// TODO Auto-generated method stub
+		List<Vehicle> vehicles = vehicleRepo.findAll();
+		List<VehicleDto> vehiclesDto = vehicles.stream().map(VehicleMapper::mapToVehicleDto)
+				.collect(Collectors.toList());
+		// List<VehicleDto> vehiclesDto=VehicleMapper.mapToVehicleDto(vehicles);
+		return vehiclesDto;
+	}
+
+	@Override
+	public String modifyVehicleById(int vehicleNo, VehicleDto vehicleDto) {
+	    // TODO Auto-generated method stub
+	    Optional<Vehicle> vehicleOptional = vehicleRepo.findById(vehicleNo);
+
+	    if (vehicleOptional.isPresent()) {
+	        Vehicle updateVehicle = vehicleOptional.get();
+	        updateVehicle.setVehicleName(vehicleDto.getVehicleName());
+	        updateVehicle.setVehicleType(vehicleDto.getVehicleType());
+	        updateVehicle.setSeatingCapacity(vehicleDto.getSeatingCapacity());
+	        updateVehicle.setDriverId(vehicleDto.getDriverId());
+	        updateVehicle.setFarePerKm(vehicleDto.getFarePerKm());
+
+	        vehicleRepo.save(updateVehicle);
+	        return "Vehicle updated successfully with number: " + vehicleNo;
+	    } else {
+	        // Vehicle with the given id not found
+	        throw new VehicleNotFoundException("Vehicle with id: " + vehicleNo + " not found");
+	    }
+	}
+
+
+
+}

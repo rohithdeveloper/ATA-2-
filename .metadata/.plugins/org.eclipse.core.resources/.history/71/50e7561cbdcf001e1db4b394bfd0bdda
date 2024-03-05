@@ -1,0 +1,6 @@
+package com.example.vehicle.service;
+
+public interface VehicleService {
+	 int addVehicle(VechicleDto vehilce);
+
+}

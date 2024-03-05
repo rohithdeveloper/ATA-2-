@@ -1,0 +1,67 @@
+package com.example.vehicle.serviceimpl;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.example.vehicle.dto.VehicleDto;
+import com.example.vehicle.model.Vehicle;
+import com.example.vehicle.modelmapper.VehicleMapper;
+import com.example.vehicle.repository.VehicleRepository;
+import com.example.vehicle.service.VehicleService;
+
+@Service
+public class VehicleServiceImpl implements VehicleService {
+
+	@Autowired
+	private VehicleRepository vehicleRepo;
+
+	 @Override
+	public String addVehicle(VehicleDto vehicleDto) {
+	    // Check if a vehicle with the given id already exists
+	     Optional<Vehicle> existingVehicle = vehicleRepo.findById(vehicleDto.getId());
+	    
+	    if (existingVehicle.isPresent()) {
+	        return "Vehicle with  " + vehicleDto.getId()+ " already exists";
+	    } else {
+	        // Convert dto to entity
+	        Vehicle vehicle = VehicleMapper.mapToVehicle(vehicleDto);
+	        
+	        // Save the new vehicle
+	        Vehicle savedVehicle = vehicleRepo.save(vehicle);
+
+	        // Convert the saved entity back to dto if needed
+	        VehicleDto savedVehicleDto = VehicleMapper.mapToVehicleDto(savedVehicle);
+
+	        // Return a success message
+	        return "Vehicle added successfully";
+	    }
+	   
+	}
+
+	
+	@Override
+	public VehicleDto viewVehicleById(int vehicleNo) {
+		// TODO Auto-generated method stub
+		Optional<Vehicle> vehicle = vehicleRepo.findById(vehicleNo);
+		if (vehicle != null) {
+			VehicleDto getVehicle = VehicleMapper.mapToVehicleDto(vehicle.get());
+			return getVehicle;
+		}
+		return null;
+	}
+
+	@Override
+	public List<VehicleDto> viewAll() {
+		// TODO Auto-generated method stub
+		List<Vehicle> vehicles = vehicleRepo.findAll();
+		List<VehicleDto> vehiclesDto = vehicles.stream().map(VehicleMapper::mapToVehicleDto)
+				.collect(Collectors.toList());
+		// List<VehicleDto> vehiclesDto=VehicleMapper.mapToVehicleDto(vehicles);
+		return vehiclesDto;
+	}
+
+}

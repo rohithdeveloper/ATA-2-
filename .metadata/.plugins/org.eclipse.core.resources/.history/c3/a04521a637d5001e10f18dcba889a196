@@ -1,0 +1,9 @@
+package com.example.ata.client;
+
+import org.springframework.cloud.openfeign.FeignClient;
+
+@FeignClient(name="ROUTE-MICROSERVICES", url="http://localhost:8085/api/route")
+public interface RouteClient {
+	
+
+}

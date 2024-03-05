@@ -1,0 +1,24 @@
+package com.example.identity.serviceimpl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.example.identity.dto.UserRegistrationDto;
+import com.example.identity.repository.UserRepository;
+import com.example.identity.service.AuthService;
+
+@Service
+public class AuthServiceImpl implements AuthService {
+	
+	
+	@Autowired
+	private UserRepository userRepo;
+
+	@Override
+	public String saveUser(UserRegistrationDto userDto) {
+		// TODO Auto-generated method stub
+		return userRepo.save(userDto);
+		
+	}
+
+}

@@ -1,0 +1,5 @@
+server.port=9191
+spring.application.name=API-Gateway
+management.endpoints.web.exposure.include=*
+
+

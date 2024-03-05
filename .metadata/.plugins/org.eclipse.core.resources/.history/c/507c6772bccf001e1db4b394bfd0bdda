@@ -1,0 +1,11 @@
+package com.example.vehicle.dto;
+
+public class VechicleDto {
+	private int vehicleNo;
+	private String vehicleName;
+	private int seatingCapacity;
+	private int driverId;
+	private String vehicleType;
+	private float farePerKm;
+
+}

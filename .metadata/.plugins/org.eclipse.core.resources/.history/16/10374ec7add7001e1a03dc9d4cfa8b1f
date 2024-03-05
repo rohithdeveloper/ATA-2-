@@ -1,0 +1,91 @@
+package com.example.vehicle.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.vehicle.dto.VehicleDto;
+import com.example.vehicle.service.VehicleService;
+
+import io.jsonwebtoken.Claims;
+import jakarta.servlet.http.HttpServletRequest;
+
+@RestController
+@RequestMapping("/api/vehicle")
+public class VehicleController {
+
+    @Autowired
+    private VehicleService vehicleService;
+
+    @PostMapping("/addVehicle")
+    public String saveVehicle(@RequestBody VehicleDto vehicleDto, HttpServletRequest request) {
+        String jwtToken = extractTokenFromHeader(request.getHeader("Authorization"));
+        validateAndExtractToken(jwtToken);
+        return vehicleService.addVehicle(vehicleDto);
+    }
+
+    @GetMapping("/securedEndpoint")
+    public String securedEndpoint(HttpServletRequest request) {
+        String jwtToken = extractTokenFromHeader(request.getHeader("Authorization"));
+        validateAndExtractToken(jwtToken);
+        return vehicleService.processSecuredEndpoint(jwtToken);
+    }
+
+    @GetMapping("/vehicle/{id}")
+    public VehicleDto getVehicleById(@PathVariable int id, HttpServletRequest request) {
+        String jwtToken = extractTokenFromHeader(request.getHeader("Authorization"));
+        validateAndExtractToken(jwtToken);
+        return vehicleService.viewVehicleById(id);
+    }
+
+    @GetMapping("/allVehicles")
+    public List<VehicleDto> getAllVehicles(HttpServletRequest request) {
+        String jwtToken = extractTokenFromHeader(request.getHeader("Authorization"));
+        validateAndExtractToken(jwtToken);
+        return vehicleService.viewAll();
+    }
+
+    @PutMapping("/vehicle/{id}")
+    public String updateVehicle(@PathVariable int id, @RequestBody VehicleDto vehicleDto, HttpServletRequest request) {
+        String jwtToken = extractTokenFromHeader(request.getHeader("Authorization"));
+        validateAndExtractToken(jwtToken);
+        return vehicleService.modifyVehicleById(id, vehicleDto);
+    }
+
+    @DeleteMapping("/vehicle/{id}")
+    public String deleteVehicle(@PathVariable int id, HttpServletRequest request) {
+        String jwtToken = extractTokenFromHeader(request.getHeader("Authorization"));
+        validateAndExtractToken(jwtToken);
+        return vehicleService.deleteVehicle(id);
+    }
+
+    private String extractTokenFromHeader(String authorizationHeader) {
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            return authorizationHeader.substring(7);
+        }
+        return null;
+    }
+
+    private void validateAndExtractToken(String jwtToken) {
+        // Validate and extract token logic
+        // Example: Using Spring Security context
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof Claims) {
+            // Token is valid, and claims can be accessed
+            Claims claims = (Claims) principal;
+            // Additional validation as needed
+        } else {
+            // Token is not valid or not present
+            throw new RuntimeException("Invalid or missing JWT token");
+        }
+    }
+}

@@ -1,0 +1,9 @@
+package com.example.identity.service;
+
+import com.example.identity.dto.UserRegistrationDto;
+
+public interface AuthService {
+	
+	public String saveUser(UserRegistrationDto userDto);
+	public String generateToken();
+}

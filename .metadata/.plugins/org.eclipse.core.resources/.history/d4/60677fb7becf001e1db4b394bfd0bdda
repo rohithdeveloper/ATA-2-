@@ -1,0 +1,24 @@
+package com.example.vehicle.model;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Table(name="Vehicle")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Vehicle {
+	
+	private int vehicleNo;
+	private String vehicleName;
+	private int seatingCapacity;
+	private int driverId;
+	private String vehicleType;
+	private float farePerKm;
+	
+
+}

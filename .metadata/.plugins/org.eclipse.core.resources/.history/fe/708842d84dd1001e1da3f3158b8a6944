@@ -1,0 +1,58 @@
+package com.example.demo.registration.configuration;
+
+import java.util.Collection;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import com.example.demo.registration.model.UserRegistration;
+
+public class UserRegUserDetails implements UserDetails {
+
+    private static final long serialVersionUID = 1L;
+    private String username;
+    private String password;
+   
+
+    public UserRegUserDetails(UserRegistration userReg) {
+        this.username = userReg.getName();
+        this.password = userReg.getPassword();
+        // Assuming your UserRegistration model has a method to get authorities
+       
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return authorities;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+}

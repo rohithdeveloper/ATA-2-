@@ -1,0 +1,36 @@
+package com.example.demo.registration.serviceimpl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.example.demo.registration.dto.UserRegistrationDto;
+import com.example.demo.registration.exception.UserNotFoundException;
+import com.example.demo.registration.model.UserRegistration;
+import com.example.demo.registration.modelmapper.RegistrationMapper;
+import com.example.demo.registration.repository.UserRepository;
+import com.example.demo.registration.service.RegistrationService;
+
+@Service
+public class RegistrationImpl implements RegistrationService {
+
+	@Autowired
+	private UserRepository userRepo;
+
+	@Override
+	public String save(UserRegistrationDto userDto) {
+	    UserRegistration existingUser = userRepo.findByName(userDto.getName());
+	    if (existingUser != null) {
+	        throw new UserNotFoundException("User already exists with name :" + existingUser.getName());
+	    	//return "User already exists with name :" + existingUser.getName();
+	    } else {
+	        // convert dto to entity
+	        UserRegistration userReg = RegistrationMapper.mapToRegistration(userDto);
+	        UserRegistration saveUserReg = userRepo.save(userReg);
+
+	        // convert entity to dto
+	        UserRegistrationDto userRegDto = RegistrationMapper.mapToRegistrationDto(saveUserReg);
+	        return "User registered successfully";
+	    }
+	}
+
+}

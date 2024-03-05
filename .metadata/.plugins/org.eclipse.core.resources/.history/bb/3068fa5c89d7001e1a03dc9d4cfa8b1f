@@ -1,0 +1,13 @@
+package com.example.demo.registration.service;
+
+import java.util.List;
+
+import com.example.demo.registration.dto.UserRegistrationDto;
+
+public interface RegistrationService {
+	String save(UserRegistrationDto userDto);
+	UserRegistrationDto getById(int userId);
+	List<UserRegistrationDto> getAllUsers();
+	 String generateToken(String username) ;
+	 void validateToken(String token);
+}
