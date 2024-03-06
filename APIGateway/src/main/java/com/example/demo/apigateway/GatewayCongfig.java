@@ -63,9 +63,8 @@ public class GatewayCongfig {
                         .filters(f -> f.filter(authenticationFilter.apply(new AuthenticationFilter.Config())))
                         .uri("http://localhost:8085"))
                 .route("Identity-Microservice", r -> r
-                        .path("/api/user/**")
-                        .filters(f -> f.filter(authenticationFilter.apply(new AuthenticationFilter.Config())))
-                        .uri("http://localhost:8086"))
+                     .path("/api/user/**")
+                     .uri("http://localhost:8086"))
                 .build();
     }
 
